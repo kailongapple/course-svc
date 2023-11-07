@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * <p> ClassName: DataSourceConfig </p>
  * <p> Package: com.ltg.course.base.config </p>
- * <p> Description: </p>
+ * <p> Description: </p> 
  * <p></p>
  *
  * @Author: LTG
