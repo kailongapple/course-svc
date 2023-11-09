@@ -76,7 +76,7 @@ jobs:
       - name: Get the outputs
         env: 
           NEW_IMAGE_URL: ${{ steps.build-course-admin-server-image.outputs.image }}
-        run: echo "The New Image Url is ${{ steps.ssm.outputs.command-id }}"
+        run: echo "The New Image Url is ${{ env.NEW_IMAGE_URL }}"
 
       - name: Build, tag, and push image to Amazon ECR B
         id: build-consumer-course-image
