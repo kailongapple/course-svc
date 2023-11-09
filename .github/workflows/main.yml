@@ -130,6 +130,6 @@ jobs:
              
              for appName in course-admin-server course-consumer-course  course-consumer-order course-login;
              do 
-                new_iamge=$(echo ${{ jobs.Build.outputs.image }} |sed "s|course-admin-server|$appName|" )
+                new_iamge=$(echo ${{jobs.Build.outputs.image}} |sed "s|course-admin-server|$appName|" )
                 echo $new_iamge >test
               done
