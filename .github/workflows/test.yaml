@@ -76,5 +76,6 @@ jobs:
             do
               cd $project
               kubectl apply -f ./
+              kubectl get pod 
             done
     
