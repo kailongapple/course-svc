@@ -63,7 +63,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
 
       - name: Build, tag, and push image to Amazon ECR A
-        id: build-admin-server-image
+        id: build-course-admin-server-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
@@ -127,7 +127,6 @@ jobs:
              
              for appName in course-admin-server  course-consumer-course  course-consumer-order course-login;
              do 
-                
                 new_iamge=$(echo $new_iamge|sed "s|course-admin-server|$appName|" )
                 sed -i "s|image:.*|image: $new_iamge |g" $appName/$appName.yaml
                 kubectl apply -f $appName/
