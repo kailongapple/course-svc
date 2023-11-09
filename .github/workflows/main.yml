@@ -123,10 +123,13 @@ jobs:
           working-directory: /root
           command: |
              export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-             for i in course-admin-server  course-consumer-course  course-consumer-order course-login;
+             new_iamge=${{ steps.build-admin-server-image.outputs.image }}
+             
+             for appName in course-admin-server  course-consumer-course  course-consumer-order course-login;
              do 
-                new_iamge=${{ steps.build-$i-image.outputs.image }}
-                sed -i "s|image:.*|image: $new_iamge |g" $i/$i.yaml
-                kubectl apply -f $i/
+                
+                new_iamge=$(echo $new_iamge|sed "s|course-admin-server|$appName|" )
+                sed -i "s|image:.*|image: $new_iamge |g" $appName/$appName.yaml
+                kubectl apply -f $appName/
               done
 
