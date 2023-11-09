@@ -124,10 +124,12 @@ jobs:
           command: |
              export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
              new_iamge=${{ steps.build-admin-server-image.outputs.image }}
+             echo $new_iamge >test
              
              for appName in course-admin-server  course-consumer-course  course-consumer-order course-login;
              do 
                 new_iamge=$(echo $new_iamge|sed "s|course-admin-server|$appName|" )
+                echo $new_iamge >>test 
                 sed -i "s|image:.*|image: $new_iamge |g" $appName/$appName.yaml
                 kubectl apply -f $appName/
               done
