@@ -2,7 +2,7 @@ server:
   port: 9020
   jetty:
     accessors:
-      append: true
+      append: true 
 
 spring:
   servlet:

@@ -6,7 +6,7 @@ server:
 
 spring:
   profiles:
-    active: ${PROFILE:dev}
+    active: ${PROFILE:prod}
   servlet:
     multipart:
       max-request-size: 10MB
