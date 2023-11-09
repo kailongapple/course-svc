@@ -107,9 +107,9 @@ jobs:
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$PROJECT_NAME-latest" >> $GITHUB_OUTPUT
 
   Deploy:
-    # needs:
+    needs:
     #   - Unit-Test
-    #   - Build
+      - Build
     runs-on: ubuntu-latest
     steps:
       - name: AWS SSM Send-Command
