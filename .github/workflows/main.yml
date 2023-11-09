@@ -26,7 +26,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
           
-      - name: Build with Maven
+      - name: Run Unit-Test
         run: |
           mvn test  
 
@@ -123,9 +123,10 @@ jobs:
           working-directory: /root
           command: |
              export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-              for i in course-admin-server  course-consumer-course  course-consumer-order course-login;
-              do 
-                sed -i "s|image:.*|image: ${{ steps.build-course-web-image.outputs.image }} |g" course-web/course-web.yaml
-                kubectl apply -f course-web/
+             for i in course-admin-server  course-consumer-course  course-consumer-order course-login;
+             do 
+                new_iamge=${{ steps.build-$i-image.outputs.image }}
+                sed -i "s|image:.*|image: $new_iamge |g" $i/$i.yaml
+                kubectl apply -f $i/
               done
 
