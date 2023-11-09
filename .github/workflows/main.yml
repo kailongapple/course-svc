@@ -111,15 +111,8 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:course-login-server-latest
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$PROJECT_NAME-latest" >> $GITHUB_OUTPUT
 
-  Deploy:
-    needs:
-    #   - Unit-Test
-      - Build
-    runs-on: ubuntu-latest
-    steps:
       - name: AWS SSM Send-Command
         uses: peterkimzz/aws-ssm-send-command@master
-        id: deploy-course-web-ssm
         with:
           aws-region: ${{ env.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -128,11 +121,11 @@ jobs:
           working-directory: /root
           command: |
              export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-             echo "${{ env.NEW_IMAGE_URL }}" >test
              
              for appName in course-admin-server  course-consumer-course  course-consumer-order course-login;
              do 
-                new_iamge=$(cat test |sed "s|course-admin-server|$appName|" )
+                new_iamge=$(echo ${{ steps.build-course-admin-server-image.outputs.image }}  |sed "s|course-admin-server|$appName|" )
+                echo $new_iamge >test
                 sed -i "s|image:.*|image: $new_iamge |g" $appName/$appName.yaml
                 kubectl apply -f $appName/
               done
