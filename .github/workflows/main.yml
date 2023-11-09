@@ -72,6 +72,10 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$PROJECT_NAME-latest $PROJECT_NAME
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$PROJECT_NAME-latest
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$PROJECT_NAME-latest" >> $GITHUB_OUTPUT
+          
+      - name: Get the outputs
+        env: 
+          NEW_IMAGE_URL: ${{ steps.build-course-admin-server-image.outputs.image }}
 
       - name: Build, tag, and push image to Amazon ECR B
         id: build-consumer-course-image
@@ -123,7 +127,7 @@ jobs:
           working-directory: /root
           command: |
              export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-             echo "${{ steps.build-course-admin-server-image.outputs.image }}" >test
+             echo "${{ env.NEW_IMAGE_URL }}" >test
              
              for appName in course-admin-server  course-consumer-course  course-consumer-order course-login;
              do 
