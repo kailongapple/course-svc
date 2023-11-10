@@ -5,13 +5,13 @@ spring:
     driver-class-name: com.p6spy.engine.spy.P6SpyDriver
     url: jdbc:p6spy:mysql://localhost:3306/course?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
-    password: 123456
+    password: j123z456y789
   data:
     redis:
       database: 0
       host: localhost
       port: 6379
-      password: 123456
+      password: j123z456y789
       jedis:
         pool:
           #最大连接数
