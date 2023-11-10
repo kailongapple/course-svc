@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - dev
 env:
   AWS_REGION: ap-southeast-1                      # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: course                          # set this to your Amazon ECR repository name
@@ -72,11 +73,6 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$PROJECT_NAME-$IMAGE_TAG $PROJECT_NAME
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$PROJECT_NAME-$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$PROJECT_NAME-$IMAGE_TAG" >> $GITHUB_OUTPUT
-          
-      - name: Get the outputs
-        env: 
-          NEW_IMAGE_URL: ${{ steps.build-course-admin-server-image.outputs.image }}
-        run: echo "The New Image Url is ${{ env.NEW_IMAGE_URL }}"
 
       - name: Build, tag, and push image to Amazon ECR Other
         env:
@@ -115,8 +111,6 @@ jobs:
       - unit_test
       - build_images
     runs-on: ubuntu-latest
-    outputs:
-      image: ${{ steps.build-admin-server-image.outputs.image }}
     steps:
       - name: AWS SSM Send-Command
         uses: peterkimzz/aws-ssm-send-command@master
@@ -127,7 +121,7 @@ jobs:
           instance-ids: ${{ secrets.INSTANCE_ID }}
           working-directory: /root
           command: |
-             echo "${{ needs.secret-generator.outputs.handle }}" >test
+             echo "${{ needs.build_images.outputs.image }}" >test
              # export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
              
              # for appName in course-admin-server course-consumer-course  course-consumer-order course-login;
