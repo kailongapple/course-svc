@@ -112,8 +112,6 @@ jobs:
       - build_images
     runs-on: ubuntu-latest
     steps:
-      - env:
-          NEW_IMAGE_URL: ${{needs.build_images.outputs.image}}
       - name: AWS SSM Send-Command
         uses: peterkimzz/aws-ssm-send-command@master
         with:
@@ -123,7 +121,7 @@ jobs:
           instance-ids: ${{ secrets.INSTANCE_ID }}
           working-directory: /root
           command: |
-             echo $NEW_IMAGE_URL >test
+             echo ${{needs.build_images.outputs.image}} >test
              # export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
              
              # for appName in course-admin-server course-consumer-course  course-consumer-order course-login;
