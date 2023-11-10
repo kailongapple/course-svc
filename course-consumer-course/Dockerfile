@@ -6,8 +6,7 @@ ARG JAR_NAME="target/course-consumer-course-1.0-SNAPSHOT.jar"
 
 ENV TZ Asia/Shanghai
 ENV PROFILE prod
-ENV JAVA_OPS -server -Xms128m -Xmx256m -XX:CompressedClassSpaceSize=64m -XX:MetaspaceSize=100m -XX:MaxMetaspaceSize=100m
-
+ENV JAVA_OPS -server -Xms128m -Xmx512m -XX:CompressedClassSpaceSize=128m -XX:MetaspaceSize=200m -XX:MaxMetaspaceSize=200m
 WORKDIR workspace
 
 COPY ${JAR_NAME}  app.jar
