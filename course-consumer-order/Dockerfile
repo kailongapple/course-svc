@@ -6,11 +6,12 @@ ARG JAR_NAME="target/course-consumer-order-1.0-SNAPSHOT.jar"
 
 ENV TZ Asia/Shanghai
 ENV PROFILE prod
-ENV JAVA_OPS -server -Xms128m -Xmx512m -XX:CompressedClassSpaceSize=128m -XX:MetaspaceSize=200m -XX:MaxMetaspaceSize=200m
+# ENV JAVA_OPS -server -Xms128m -Xmx512m -XX:CompressedClassSpaceSize=128m -XX:MetaspaceSize=200m -XX:MaxMetaspaceSize=200m
 WORKDIR workspace
 
 COPY ${JAR_NAME}  app.jar
 
 EXPOSE 9002
 
-CMD java ${JAVA_OPS} -Dspring.profiles.active=${PROFILE} -Djava.security.egd=file:/dev/./urandom -jar app.jar
+# CMD java ${JAVA_OPS} -Dspring.profiles.active=${PROFILE} -Djava.security.egd=file:/dev/./urandom -jar app.jar
+CMD java -Dspring.profiles.active=${PROFILE} -Djava.security.egd=file:/dev/./urandom -jar app.jar
