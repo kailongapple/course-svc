@@ -5,7 +5,7 @@ LABEL maintainer="nekoimi <nekoimime@gmail.com>"
 ARG JAR_NAME="target/course-consumer-order-1.0-SNAPSHOT.jar"
 
 ENV TZ Asia/Shanghai
-ENV PROFILE dev
+ENV PROFILE prod
 ENV JAVA_OPS -server -Xms128m -Xmx256m -XX:CompressedClassSpaceSize=64m -XX:MetaspaceSize=100m -XX:MaxMetaspaceSize=100m
 
 WORKDIR workspace
