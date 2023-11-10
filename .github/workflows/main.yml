@@ -13,7 +13,7 @@ env:
   # set this to the name of the container in the
   # containerDefinitions section of your task definition
 jobs:
-  Unit-Test:
+  unit_test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,9 +30,9 @@ jobs:
         run: |
           mvn test  
 
-  Build:
+  build_images:
     needs:
-      - Unit-Test
+      - unit_test
     runs-on: ubuntu-latest
     outputs:
       image: ${{ steps.build-course-admin-server-image.outputs.image }}
@@ -110,27 +110,28 @@ jobs:
                 kubectl apply -f $appName/
               done
               
-  # Deploy:
-  #   needs:
-  #     - Unit-Test
-  #     - Build
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     image: ${{ steps.build-admin-server-image.outputs.image }}
-  #   steps:
-  #     - name: AWS SSM Send-Command
-  #       uses: peterkimzz/aws-ssm-send-command@master
-  #       with:
-  #         aws-region: ${{ env.AWS_REGION }}
-  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         instance-ids: ${{ secrets.INSTANCE_ID }}
-  #         working-directory: /root
-  #         command: |
-  #            export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+  deploy_to_k8s:
+    needs:
+      - unit_test
+      - build_images
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.build-admin-server-image.outputs.image }}
+    steps:
+      - name: AWS SSM Send-Command
+        uses: peterkimzz/aws-ssm-send-command@master
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          instance-ids: ${{ secrets.INSTANCE_ID }}
+          working-directory: /root
+          command: |
+             echo "${{ needs.secret-generator.outputs.handle }}" >test
+             # export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
              
-  #            for appName in course-admin-server course-consumer-course  course-consumer-order course-login;
-  #            do 
-  #               new_iamge=$(echo ${{ needs.Build.outputs.image }} |sed "s|course-admin-server|$appName|" )
-  #               echo $new_iamge >test
-  #             done
+             # for appName in course-admin-server course-consumer-course  course-consumer-order course-login;
+             # do 
+             #    new_iamge=$(echo ${{ needs.build_image.outputs.image }} |sed "s|course-admin-server|$appName|" )
+             #    echo $new_iamge >test
+             #  done
