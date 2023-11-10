@@ -1,4 +1,4 @@
-name: course-svc
+name: dev-course-svc
 on:
   push:
     branches:
